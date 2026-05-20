@@ -1,15 +1,19 @@
 {
   "name": "pg-jaipur",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "server.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
+    "build": "npm install --build-from-source",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "PG Jaipur - Find PG accommodations in Jaipur",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^11.10.0",
