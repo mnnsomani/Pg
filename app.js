@@ -1,4 +1,4 @@
-const API = 'http://localhost:3001';
+const API = window.location.origin;
 
 // ---- DATA ----
 const pgs = [
