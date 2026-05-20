@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Odyssey</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: var(--bg2); }
+
+    /* ── HEADER ───────────────────────────────── */
+    .admin-header {
+      background: var(--text);
+      padding: 16px 0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .admin-header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .admin-logo { color: #fff; font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .admin-logo-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; }
+    .admin-badge {
+      background: rgba(196,146,106,0.2); color: var(--accent);
+      border: 1px solid rgba(196,146,106,0.3);
+      padding: 3px 10px; border-radius: 50px; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .admin-header-right { display: flex; align-items: center; gap: 12px; }
+    .admin-header-right a { color: rgba(255,255,255,0.55); font-size: 13px; text-decoration: none; }
+    .admin-header-right a:hover { color: #fff; }
+
+    /* ── STATS ROW ────────────────────────────── */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 16px; margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px 28px;
+    }
+    .stat-card .s-label { font-size: 12px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+    .stat-card .s-num { font-size: 36px; font-weight: 700; color: var(--text); letter-spacing: -1.5px; }
+    .stat-card .s-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* ── SECTION ──────────────────────────────── */
+    .admin-section { margin-bottom: 32px; }
+    .admin-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .admin-section-header h2 {
+      font-size: 16px; font-weight: 600; color: var(--text);
+    }
+    .count-badge {
+      background: var(--bg3); border: 1px solid var(--border);
+      color: var(--muted); border-radius: 50px; padding: 2px 10px;
+      font-size: 12px; font-weight: 600;
+    }
+
+    /* ── TABLE ────────────────────────────────── */
+    .table-wrap {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      background: var(--bg2); padding: 11px 16px;
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.8px;
+      text-align: left; border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: 13px 16px; font-size: 13px; color: var(--text2);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top; max-width: 240px;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--bg2); }
+    td.primary { color: var(--text); font-weight: 500; }
+    td.mono { font-family: monospace; font-size: 12px; }
+
+    /* Status pill */
+    .pill {
+      display: inline-block; padding: 3px 9px; border-radius: 50px;
+      font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .pill-pending  { background: #fef3c7; color: #92400e; }
+    .pill-approved { background: #d1fae5; color: #065f46; }
+    .pill-boys     { background: #dbeafe; color: #1d4ed8; }
+    .pill-girls    { background: #fce7f3; color: #be185d; }
+    .pill-coed     { background: #f3e8ff; color: #6b21a8; }
+
+    /* Empty state */
+    .empty {
+      text-align: center; padding: 52px 24px; color: var(--muted);
+    }
+    .empty .e-icon { font-size: 32px; margin-bottom: 10px; }
+    .empty p { font-size: 14px; }
+
+    /* Wrap long text */
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; }
+    .msg-cell { max-width: 260px; }
+
+    /* Refresh btn */
+    .btn-refresh {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); background: none;
+      font: 500 13px 'Inter', sans-serif; cursor: pointer; color: var(--text2);
+      transition: var(--trans);
+    }
+    .btn-refresh:hover { border-color: var(--text2); color: var(--text); }
+
+    /* Page wrapper */
+    .admin-body { padding: 36px 0 72px; }
+  </style>
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="admin-logo"><span class="admin-logo-dot"></span> Odyssey</div>
+        <span class="admin-badge">Admin</span>
+      </div>
+      <div class="admin-header-right">
+        <span id="last-refreshed" style="font-size:12px;color:rgba(255,255,255,0.4)"></span>
+        <a href="index.html">← Back to Site</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-body">
+    <div class="container">
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="s-label">Total Users</div>
+          <div class="s-num" id="stat-users">—</div>
+          <div class="s-sub">Registered accounts</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-label">Enquiries</div>
+          <div class="s-num" id="stat-enquiries">—</div>
+          <div class="s-sub">Contact form submissions</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-label">PG Registrations</div>
+          <div class="s-num" id="stat-listings">—</div>
+          <div class="s-sub">Owner listing requests</div>
+        </div>
+      </div>
+
+      <!-- Enquiries -->
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <h2>📬 Contact Enquiries</h2>
+          <span class="count-badge" id="enq-count">0</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Message</th>
+                <th>Received</th>
+              </tr>
+            </thead>
+            <tbody id="enq-body">
+              <tr><td colspan="6"><div class="empty"><div class="e-icon">⏳</div><p>Loading...</p></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PG Listings -->
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <h2>🏠 PG Registration Requests</h2>
+          <span class="count-badge" id="pg-count">0</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>PG Name</th>
+                <th>Owner</th>
+                <th>Contact</th>
+                <th>Area</th>
+                <th>Type</th>
+                <th>Rent</th>
+                <th>Amenities</th>
+                <th>Status</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody id="pg-body">
+              <tr><td colspan="10"><div class="empty"><div class="e-icon">⏳</div><p>Loading...</p></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Users -->
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <h2>👤 Registered Users</h2>
+          <span class="count-badge" id="usr-count">0</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Joined</th>
+              </tr>
+            </thead>
+            <tbody id="usr-body">
+              <tr><td colspan="4"><div class="empty"><div class="e-icon">⏳</div><p>Loading...</p></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:3001';
+
+    function fmt(dt) {
+      if (!dt) return '—';
+      const d = new Date(dt);
+      return d.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' })
+           + ' ' + d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
+    }
+
+    function pill(type) {
+      const map = { pending:'pending', approved:'approved', boys:'boys', girls:'girls', coed:'coed' };
+      const cls = map[type] || 'pending';
+      return `<span class="pill pill-${cls}">${type}</span>`;
+    }
+
+    function empty(cols, msg = 'No data yet') {
+      return `<tr><td colspan="${cols}"><div class="empty"><div class="e-icon">📭</div><p>${msg}</p></div></td></tr>`;
+    }
+
+    async function loadAll() {
+      document.getElementById('last-refreshed').textContent =
+        'Last refreshed: ' + new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true });
+
+      try {
+        const [enqRes, pgRes, usrRes] = await Promise.all([
+          fetch(`${API}/api/enquiries`),
+          fetch(`${API}/api/listings`),
+          fetch(`${API}/api/users`)
+        ]);
+
+        const enqs = await enqRes.json();
+        const pgs  = await pgRes.json();
+        const usrs = await usrRes.json();
+
+        // Stats
+        document.getElementById('stat-users').textContent    = usrs.length ?? '—';
+        document.getElementById('stat-enquiries').textContent = enqs.length ?? '—';
+        document.getElementById('stat-listings').textContent  = pgs.length  ?? '—';
+        document.getElementById('enq-count').textContent = enqs.length;
+        document.getElementById('pg-count').textContent  = pgs.length;
+        document.getElementById('usr-count').textContent = usrs.length;
+
+        // Enquiries table
+        document.getElementById('enq-body').innerHTML = enqs.length
+          ? enqs.map(r => `
+            <tr>
+              <td class="mono">${r.id}</td>
+              <td class="primary">${r.name}</td>
+              <td>${r.email}</td>
+              <td>${r.phone || '—'}</td>
+              <td class="msg-cell"><div class="truncate" title="${r.message}">${r.message || '—'}</div></td>
+              <td style="white-space:nowrap;color:var(--muted)">${fmt(r.created_at)}</td>
+            </tr>`).join('')
+          : empty(6, 'No enquiries yet — submit the contact form to see data here');
+
+        // PG Listings table
+        document.getElementById('pg-body').innerHTML = pgs.length
+          ? pgs.map(r => `
+            <tr>
+              <td class="mono">${r.id}</td>
+              <td class="primary"><div class="truncate" title="${r.pg_name}">${r.pg_name}</div></td>
+              <td>${r.owner_name}</td>
+              <td style="font-size:12px">${r.email}<br/><span style="color:var(--muted)">${r.phone}</span></td>
+              <td>${r.area}</td>
+              <td>${pill(r.type)}</td>
+              <td style="white-space:nowrap">₹${Number(r.price).toLocaleString('en-IN')}<span style="color:var(--muted);font-size:11px">/mo</span></td>
+              <td><div class="truncate" style="max-width:160px" title="${r.amenities}">${r.amenities || '—'}</div></td>
+              <td>${pill(r.status || 'pending')}</td>
+              <td style="white-space:nowrap;color:var(--muted)">${fmt(r.created_at)}</td>
+            </tr>`).join('')
+          : empty(10, 'No listings yet — submit via "List Your PG" to see data here');
+
+        // Users table
+        document.getElementById('usr-body').innerHTML = usrs.length
+          ? usrs.map(r => `
+            <tr>
+              <td class="mono">${r.id}</td>
+              <td class="primary">${r.name}</td>
+              <td>${r.email}</td>
+              <td style="white-space:nowrap;color:var(--muted)">${fmt(r.created_at)}</td>
+            </tr>`).join('')
+          : empty(4, 'No users yet');
+
+      } catch (err) {
+        console.error(err);
+        const msg = `<tr><td colspan="10"><div class="empty"><div class="e-icon">❌</div><p>Could not connect to API at ${API}. Is the server running?</p></div></td></tr>`;
+        document.getElementById('enq-body').innerHTML = msg;
+        document.getElementById('pg-body').innerHTML  = msg;
+        document.getElementById('usr-body').innerHTML = msg;
+      }
+    }
+
+    // Load on open, then auto-refresh every 30s
+    loadAll();
+    setInterval(loadAll, 30000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>List Your PG — Odyssey</title>
+  <meta name="description" content="Register your PG on Odyssey. Free listing, zero commission, reach thousands of tenants in Jaipur." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: var(--bg2); }
+
+    /* ── PAGE HEADER ─────────────────────────── */
+    .page-header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+    }
+    .page-header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .page-logo {
+      display: flex; align-items: center; gap: 6px;
+      text-decoration: none; color: var(--text);
+      font-size: 18px; font-weight: 700; letter-spacing: -0.3px;
+    }
+    .page-logo-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; }
+
+    /* ── HERO BANNER ─────────────────────────── */
+    .list-hero {
+      background: var(--text);
+      padding: 60px 0 52px;
+      text-align: center;
+    }
+    .list-hero .tag { color: var(--accent); }
+    .list-hero h1 {
+      font-size: clamp(26px, 4vw, 44px); font-weight: 700;
+      color: #fff; letter-spacing: -1px;
+      margin: 12px 0 10px; line-height: 1.2;
+    }
+    .list-hero h1 em { font-style: normal; color: #f0c9a0; }
+    .list-hero p { font-size: 15px; color: rgba(255,255,255,0.6); }
+    .perks {
+      display: flex; justify-content: center; gap: 32px;
+      margin-top: 32px; flex-wrap: wrap;
+    }
+    .perk {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: rgba(255,255,255,0.75);
+    }
+    .perk-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+
+    /* ── FORM WRAPPER ────────────────────────── */
+    .form-page { max-width: 760px; margin: 0 auto; padding: 48px 28px 72px; }
+
+    /* Section block */
+    .form-section {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 32px;
+      margin-bottom: 20px;
+    }
+    .form-section-title {
+      font-size: 15px; font-weight: 600; color: var(--text);
+      margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
+    }
+    .form-section-title span { font-size: 18px; }
+    .form-section-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+    /* Grid */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media(max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+    .col-span-2 { grid-column: 1 / -1; }
+
+    /* Fields */
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field label { font-size: 13px; font-weight: 500; color: var(--text2); }
+    .field label .req { color: var(--accent); margin-left: 2px; }
+    .field input, .field select, .field textarea {
+      background: var(--bg2); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 11px 14px;
+      font: 14px 'Inter', sans-serif; color: var(--text);
+      outline: none; transition: var(--trans); resize: none;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--accent); background: #fff;
+      box-shadow: 0 0 0 3px rgba(196,146,106,0.1);
+    }
+    .field input::placeholder, .field textarea::placeholder { color: var(--dim); }
+    .field select { appearance: none; cursor: pointer; }
+    .field .hint { font-size: 11px; color: var(--muted); }
+
+    /* Amenity checkboxes */
+    .amenity-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 10px; margin-top: 4px;
+    }
+    @media(max-width:600px) { .amenity-grid { grid-template-columns: repeat(2,1fr); } }
+    .amenity-check {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 12px; border: 1.5px solid var(--border);
+      border-radius: 8px; cursor: pointer; transition: var(--trans);
+      font-size: 13px; color: var(--text2); background: var(--bg2);
+      user-select: none;
+    }
+    .amenity-check input { display: none; }
+    .amenity-check.checked {
+      border-color: var(--accent); background: var(--accent-light);
+      color: var(--accent-dark);
+    }
+    .amenity-check .am-box {
+      width: 16px; height: 16px; border: 1.5px solid var(--border);
+      border-radius: 4px; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; font-size: 10px;
+      transition: var(--trans); background: #fff;
+    }
+    .amenity-check.checked .am-box { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* Price input with prefix */
+    .price-wrap { position: relative; }
+    .price-wrap .prefix {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 14px; color: var(--muted); font-weight: 500;
+      pointer-events: none;
+    }
+    .price-wrap input { padding-left: 26px; }
+
+    /* Progress steps */
+    .progress {
+      display: flex; align-items: center; gap: 0;
+      margin-bottom: 36px; background: var(--card);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 18px 28px; overflow: hidden;
+    }
+    .prog-step { display: flex; align-items: center; gap: 10px; flex: 1; }
+    .prog-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+      background: var(--bg2); border: 1.5px solid var(--border); color: var(--muted);
+    }
+    .prog-step.active .prog-num { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .prog-step.done .prog-num { background: var(--text); border-color: var(--text); color: #fff; }
+    .prog-label { font-size: 12px; font-weight: 500; color: var(--muted); }
+    .prog-step.active .prog-label, .prog-step.done .prog-label { color: var(--text); }
+    .prog-line { flex: 1; height: 1px; background: var(--border); margin: 0 10px; }
+    .prog-step.done + .prog-line { background: var(--text); }
+
+    /* Submit area */
+    .form-submit {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px 32px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .submit-note { flex: 1; }
+    .submit-note strong { font-size: 14px; color: var(--text); display: block; margin-bottom: 3px; }
+    .submit-note span { font-size: 13px; color: var(--muted); }
+    .btn-submit {
+      padding: 13px 32px; border: none; border-radius: var(--radius-sm);
+      background: var(--text); color: #fff;
+      font: 600 14px 'Inter', sans-serif; cursor: pointer;
+      transition: var(--trans); white-space: nowrap; flex-shrink: 0;
+    }
+    .btn-submit:hover { background: #333; transform: translateY(-1px); box-shadow: var(--shadow); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* Success state */
+    .success-card {
+      text-align: center; padding: 64px 32px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); display: none;
+    }
+    .success-card .s-icon { font-size: 52px; margin-bottom: 20px; }
+    .success-card h2 { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
+    .success-card p { font-size: 15px; color: var(--text2); margin-bottom: 28px; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container page-header-inner">
+      <a href="index.html" class="page-logo">
+        <span class="page-logo-dot"></span> Odyssey
+      </a>
+      <a href="index.html" class="btn btn-ghost btn-sm">← Back to Home</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <div class="list-hero">
+    <div class="container">
+      <span class="tag">For PG Owners</span>
+      <h1>List your PG,<br /><em>reach more tenants</em></h1>
+      <p>Free listing · Zero commission · Verified badge after review</p>
+      <div class="perks">
+        <div class="perk"><span class="perk-dot"></span> Free forever</div>
+        <div class="perk"><span class="perk-dot"></span> 2,000+ tenants monthly</div>
+        <div class="perk"><span class="perk-dot"></span> Verified badge</div>
+        <div class="perk"><span class="perk-dot"></span> No middlemen</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-page">
+
+    <!-- Progress -->
+    <div class="progress">
+      <div class="prog-step active" id="ps1">
+        <div class="prog-num">1</div>
+        <div class="prog-label">Your Details</div>
+      </div>
+      <div class="prog-line"></div>
+      <div class="prog-step" id="ps2">
+        <div class="prog-num">2</div>
+        <div class="prog-label">PG Details</div>
+      </div>
+      <div class="prog-line"></div>
+      <div class="prog-step" id="ps3">
+        <div class="prog-num">3</div>
+        <div class="prog-label">Amenities &amp; Pricing</div>
+      </div>
+    </div>
+
+    <form id="pg-form" onsubmit="submitListing(event)" novalidate>
+
+      <!-- Section 1: Owner Details -->
+      <div class="form-section">
+        <div class="form-section-title"><span>👤</span> Your Details</div>
+        <div class="form-section-sub">As the PG owner or manager.</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" id="owner_name" placeholder="Ramesh Kumar" required />
+          </div>
+          <div class="field">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" id="email" placeholder="you@email.com" required />
+          </div>
+          <div class="field">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" id="phone" placeholder="+91 98765 43210" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: PG Details -->
+      <div class="form-section">
+        <div class="form-section-title"><span>🏠</span> PG Details</div>
+        <div class="form-section-sub">Tell us about your property.</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>PG / Hostel Name <span class="req">*</span></label>
+            <input type="text" id="pg_name" placeholder="e.g. Sunshine Girls PG" required />
+          </div>
+          <div class="field">
+            <label>Area / Locality <span class="req">*</span></label>
+            <select id="area" required>
+              <option value="">Select area</option>
+              <option>Malviya Nagar</option>
+              <option>Vaishali Nagar</option>
+              <option>C-Scheme</option>
+              <option>Mansarovar</option>
+              <option>Jagatpura</option>
+              <option>Sitapura</option>
+              <option>Civil Lines</option>
+              <option>Bani Park</option>
+              <option>Tonk Road</option>
+              <option>Sanganer</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field col-span-2">
+            <label>Full Address <span class="req">*</span></label>
+            <input type="text" id="address" placeholder="House no., street, landmark, Jaipur" required />
+          </div>
+          <div class="field">
+            <label>PG Type <span class="req">*</span></label>
+            <select id="type" required>
+              <option value="">Select type</option>
+              <option value="boys">Boys Only</option>
+              <option value="girls">Girls Only</option>
+              <option value="coed">Co-ed (Boys &amp; Girls)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Available Rooms</label>
+            <input type="number" id="rooms" placeholder="e.g. 10" min="1" />
+          </div>
+          <div class="field col-span-2">
+            <label>Description</label>
+            <textarea id="description" rows="3" placeholder="Describe your PG — location advantages, rules, nearby colleges, etc."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Amenities & Pricing -->
+      <div class="form-section">
+        <div class="form-section-title"><span>✨</span> Amenities &amp; Pricing</div>
+        <div class="form-section-sub">Check all amenities available at your PG.</div>
+
+        <div class="amenity-grid" id="amenity-grid">
+          <!-- Rendered by JS -->
+        </div>
+
+        <div class="form-grid" style="margin-top:22px">
+          <div class="field">
+            <label>Monthly Rent (₹) <span class="req">*</span></label>
+            <div class="price-wrap">
+              <span class="prefix">₹</span>
+              <input type="number" id="price" placeholder="6000" min="1000" required />
+            </div>
+            <span class="hint">Minimum rent per bed/room per month</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="form-submit">
+        <div class="submit-note">
+          <strong>Ready to list?</strong>
+          <span>Our team will review and verify within 24–48 hours.</span>
+        </div>
+        <button type="submit" class="btn-submit" id="submit-btn">Submit Listing →</button>
+      </div>
+
+    </form>
+
+    <!-- Success state -->
+    <div class="success-card" id="success-card">
+      <div class="s-icon">🎉</div>
+      <h2>Listing submitted!</h2>
+      <p>Thanks! Our team will review your PG and get back to you within<br />24–48 hours. We'll contact you on the phone number provided.</p>
+      <a href="index.html" class="btn btn-primary">← Back to Odyssey</a>
+    </div>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API = 'http://localhost:3001';
+
+    // ── Amenities ──────────────────────────────────
+    const AMENITIES = [
+      'WiFi', 'AC', 'Food Included', 'Laundry',
+      'CCTV', 'Parking', 'Gym', 'TV',
+      'RO Water', 'Study Room', 'Biometric', 'Power Backup'
+    ];
+
+    const amenityGrid = document.getElementById('amenity-grid');
+    AMENITIES.forEach(name => {
+      const label = document.createElement('label');
+      label.className = 'amenity-check';
+      label.innerHTML = `
+        <input type="checkbox" value="${name}" />
+        <span class="am-box">✓</span>
+        ${name}
+      `;
+      label.addEventListener('click', () => {
+        const cb = label.querySelector('input');
+        // toggled after click, so check the new state
+        setTimeout(() => label.classList.toggle('checked', cb.checked), 0);
+      });
+      amenityGrid.appendChild(label);
+    });
+
+    // ── Progress highlight ─────────────────────────
+    function updateProgress() {
+      const fields1 = ['owner_name','email','phone'];
+      const fields2 = ['pg_name','area','address','type'];
+      const ok1 = fields1.every(f => document.getElementById(f).value.trim());
+      const ok2 = fields2.every(f => document.getElementById(f).value.trim());
+
+      document.getElementById('ps1').className = 'prog-step ' + (ok1 ? 'done' : 'active');
+      document.getElementById('ps2').className = 'prog-step ' + (ok2 ? 'done' : ok1 ? 'active' : '');
+      document.getElementById('ps3').className = 'prog-step ' + (ok2 ? 'active' : '');
+    }
+    document.getElementById('pg-form').addEventListener('input', updateProgress);
+
+    // ── Submit ─────────────────────────────────────
+    async function submitListing(e) {
+      e.preventDefault();
+
+      const owner_name  = document.getElementById('owner_name').value.trim();
+      const email       = document.getElementById('email').value.trim();
+      const phone       = document.getElementById('phone').value.trim();
+      const pg_name     = document.getElementById('pg_name').value.trim();
+      const area        = document.getElementById('area').value;
+      const address     = document.getElementById('address').value.trim();
+      const type        = document.getElementById('type').value;
+      const price       = document.getElementById('price').value;
+      const rooms       = document.getElementById('rooms').value;
+      const description = document.getElementById('description').value.trim();
+      const amenities   = [...document.querySelectorAll('.amenity-check input:checked')].map(i => i.value);
+
+      if (!owner_name || !email || !phone || !pg_name || !area || !address || !type || !price) {
+        showToast('⚠️ Please fill in all required fields.');
+        return;
+      }
+
+      const btn = document.getElementById('submit-btn');
+      btn.textContent = 'Submitting...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`${API}/api/list-pg`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ owner_name, email, phone, pg_name, area, address, type, price, rooms, description, amenities })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || 'Something went wrong');
+
+        // Show success state
+        document.getElementById('pg-form').style.display = 'none';
+        document.querySelector('.progress').style.display = 'none';
+        document.getElementById('success-card').style.display = 'block';
+
+      } catch (err) {
+        showToast('❌ ' + err.message);
+        btn.textContent = 'Submit Listing →';
+        btn.disabled = false;
+      }
+    }
+
+    function showToast(msg, ms = 4000) {
+      const el = document.getElementById('toast');
+      el.textContent = msg; el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), ms);
+    }
+  </script>
+</body>
+</html>

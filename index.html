@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Odyssey — Find Your Perfect PG in Jaipur</title>
+  <meta name="description" content="Find verified, affordable PG accommodations for boys and girls across Jaipur. Zero brokerage." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    // Auth guard — redirect to sign-in if no session
+    (function() {
+      if (!localStorage.getItem('odyssey_user')) {
+        window.location.replace('signin.html');
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-dot"></span> Odyssey
+      </a>
+      <ul class="nav-links">
+        <li><a href="#listings">Find PG</a></li>
+        <li><a href="#areas">Areas</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions" id="nav-actions">
+        <!-- Populated by JS after auth check -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <img src="jaipur_city.png" alt="Jaipur skyline" class="hero-bg" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Your home in<br /><em>Jaipur,</em> found.</h1>
+      <p>Verified, affordable PG accommodations for students and professionals. Zero brokerage.</p>
+
+      <div class="hero-tabs">
+        <button class="hero-tab active" onclick="setTab(this,'all')">All PGs</button>
+        <button class="hero-tab" onclick="setTab(this,'boys')">Boys</button>
+        <button class="hero-tab" onclick="setTab(this,'girls')">Girls</button>
+      </div>
+
+      <div class="search-box">
+        <select id="sel-area">
+          <option value="">📍 Any Area</option>
+          <option>Malviya Nagar</option><option>Vaishali Nagar</option>
+          <option>C-Scheme</option><option>Mansarovar</option>
+          <option>Jagatpura</option><option>Sitapura</option>
+          <option>Civil Lines</option><option>Bani Park</option>
+        </select>
+        <select id="sel-budget">
+          <option value="">₹ Budget</option>
+          <option>Under ₹5,000</option><option>₹5,000–₹8,000</option>
+          <option>₹8,000–₹12,000</option><option>Above ₹12,000</option>
+        </select>
+        <button class="btn btn-accent" onclick="doSearch()">Search →</button>
+      </div>
+
+      <div class="hero-stats">
+        <div><b data-target="500">0</b>+<small>Verified PGs</small></div>
+        <div><b data-target="2000">0</b>+<small>Happy Tenants</small></div>
+        <div><b data-target="10">0</b>+<small>Localities</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="container">
+      <div class="sec-head centered">
+        <span class="tag">Simple Process</span>
+        <h2>Find your PG in <em>3 easy steps</em></h2>
+        <div class="divider"></div>
+        <p style="margin-top:14px">No brokerage. No hassle. Just the perfect PG.</p>
+      </div>
+      <div class="grid-3 steps" style="position:relative">
+        <div class="step-card">
+          <span class="step-num">Step 01</span>
+          <span class="step-icon">🔍</span>
+          <h3>Search by Area</h3>
+          <p>Pick your locality and budget to see matching PGs instantly.</p>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-card">
+          <span class="step-num">Step 02</span>
+          <span class="step-icon">🏠</span>
+          <h3>Browse & Shortlist</h3>
+          <p>Compare amenities, photos, and reviews to shortlist your favourites.</p>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-card">
+          <span class="step-num">Step 03</span>
+          <span class="step-icon">✅</span>
+          <h3>Visit & Move In</h3>
+          <p>Schedule a free visit and move in — zero brokerage, ever.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LISTINGS -->
+  <section class="section bg2" id="listings">
+    <div class="container">
+      <div class="sec-head">
+        <span class="tag">Top Picks</span>
+        <h2>Featured <em>Listings</em></h2>
+        <div class="divider"></div>
+        <p style="margin-top:14px">Hand-picked, verified PGs across Jaipur's top localities.</p>
+      </div>
+      <div class="filter-bar">
+        <span class="filter-label">Filter by:</span>
+        <button class="filter-btn filter active" data-gender="all" onclick="setGenderFilter('all',this)">All</button>
+        <button class="filter-btn filter" data-gender="boys" onclick="setGenderFilter('boys',this)">Boys</button>
+        <button class="filter-btn filter" data-gender="girls" onclick="setGenderFilter('girls',this)">Girls</button>
+        
+        <select class="filter" id="ac-filter" onchange="applyFilters()" style="cursor:pointer; outline:none; font-size:13px;">
+          <option value="all">AC / Non-AC</option>
+          <option value="ac">AC Rooms</option>
+          <option value="non_ac">Non-AC Rooms</option>
+        </select>
+        
+        <select class="filter" id="seater-filter" onchange="applyFilters()" style="cursor:pointer; outline:none; font-size:13px;">
+          <option value="all">Room Capacity</option>
+          <option value="1">1 Seater</option>
+          <option value="2">2 Seater</option>
+          <option value="3">3 Seater</option>
+        </select>
+        
+        <label style="font-size:13px; color:var(--text2); display:flex; align-items:center; gap:6px; margin-left:8px; cursor:pointer;" class="filter-label">
+          <input type="checkbox" id="food-filter" onchange="applyFilters()" style="cursor:pointer;" /> With Food
+        </label>
+      </div>
+      <div class="grid-3" id="listing-grid"></div>
+    </div>
+  </section>
+
+  <!-- AREAS -->
+  <section class="section" id="areas">
+    <div class="container">
+      <div class="sec-head centered">
+        <span class="tag">Explore by Locality</span>
+        <h2>Popular <em>Areas in Jaipur</em></h2>
+        <div class="divider"></div>
+      </div>
+      <div class="areas-grid" id="area-grid"></div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="section bg2" id="why">
+    <div class="container why-inner">
+      <div class="why-text">
+        <span class="tag">Why Odyssey</span>
+        <h2>The smarter way to <em>find your stay</em></h2>
+        <div class="divider"></div>
+        <p style="margin-top:14px">We're your trusted partner for safe, comfortable living in Jaipur.</p>
+        <div class="features" style="margin-top:28px">
+          <div class="feat"><span>✅</span><div><h4>100% Verified Listings</h4><p>Every PG is physically visited before going live.</p></div></div>
+          <div class="feat"><span>🛡️</span><div><h4>Safety First for Girls</h4><p>CCTV, biometric, 24/7 security details listed upfront.</p></div></div>
+          <div class="feat"><span>💸</span><div><h4>Zero Brokerage</h4><p>No middlemen. Connect directly with PG owners.</p></div></div>
+          <div class="feat"><span>⭐</span><div><h4>Genuine Reviews</h4><p>Only actual tenants can leave reviews. No fake ratings.</p></div></div>
+        </div>
+      </div>
+      <div class="why-img-wrap">
+        <img src="bigpg.webp" alt="PG Room" />
+        <div class="img-badge">
+          <span class="badge-icon">🏆</span>
+          <div><strong>Top Rated PG</strong><small>⭐⭐⭐⭐⭐ 4.9 / 5</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- CTA -->
+  <section class="section bg3" id="cta">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-left">
+          <span class="tag">For PG Owners</span>
+          <h2>List your property<br /><em>for free</em></h2>
+          <p>No commission. No hidden charges. Just more tenants.</p>
+          <div class="cta-btns">
+            <button class="btn btn-primary" onclick="window.location.href='list-pg.html'">List Your PG — Free</button>
+            <button class="btn btn-ghost" onclick="toast('📧 Email: hello@odyssey.in')">Learn More →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="container contact-inner">
+      <div class="contact-text">
+        <span class="tag">Get In Touch</span>
+        <h2>We're here to <em>help you</em></h2>
+        <div class="divider"></div>
+        <p>Available 7 days a week to help you find the best PG.</p>
+        <div class="contact-info" style="margin-top:28px">
+          <div>📞 +91 7878535364</div>
+          <div>📧 mnnsomani@gmail.com</div>
+          <div>📍 Jagatpura, Jaipur</div>
+        </div>
+      </div>
+      <form id="contact-form" onsubmit="submitForm(event)">
+        <label>Name<input type="text" placeholder="Your name" required /></label>
+        <label>Email<input type="email" placeholder="your@email.com" required /></label>
+        <label>Phone<input type="tel" placeholder="+91 98765 43210" /></label>
+        <label>Message<textarea rows="4" placeholder="I'm looking for a PG in..."></textarea></label>
+        <button type="submit" class="btn btn-primary" id="submit-btn">Send Message →</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        <div class="footer-logo">Odyssey</div>
+        <p>Trusted PG finder for boys and girls in Jaipur.</p>
+      </div>
+      <div>
+        <h4>Find PG</h4>
+        <a href="#">Boys PG</a><a href="#">Girls PG</a><a href="#">With Food</a><a href="#">AC Rooms</a>
+      </div>
+      <div>
+        <h4>Areas</h4>
+        <a href="#">Malviya Nagar</a><a href="#">Vaishali Nagar</a><a href="#">C-Scheme</a><a href="#">Mansarovar</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="#">About</a><a href="list-pg.html">List Your PG</a><a href="#">Blog</a><a href="#">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <span>© 2025 Odyssey. All rights reserved.</span>
+      <span>Made with ❤️ in Jaipur</span>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal" onclick="closeModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
